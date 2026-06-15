@@ -45,6 +45,16 @@ func TestExtractedModuleGateRuns(t *testing.T) {
 	}
 }
 
+func TestIgnoresRepositoryStateDirectory(t *testing.T) {
+	root := copyModule(t)
+	writeFile(t, root, ".git/HEAD", "ref: refs/heads/main\n")
+
+	item := loadManifest(t, root)
+
+	requireNoPath(t, topLevelRootViolations(t, root, item), ".git")
+	requireNoPath(t, sourceInventoryViolations(t, root, sourceOwners(item.SourceInventory)), ".git/HEAD")
+}
+
 func declaredModulePath(t *testing.T, path string) string {
 	t.Helper()
 
@@ -96,16 +106,30 @@ func loadManifest(t *testing.T, root string) manifest {
 func requireTopLevelRoots(t *testing.T, item manifest) {
 	t.Helper()
 
-	entries, err := os.ReadDir(sourceRoot(t))
+	violations := topLevelRootViolations(t, sourceRoot(t), item)
+	if len(violations) > 0 {
+		t.Fatalf("unexpected top-level root %s", violations[0])
+	}
+}
+
+func topLevelRootViolations(t *testing.T, root string, item manifest) []string {
+	t.Helper()
+
+	entries, err := os.ReadDir(root)
 	if err != nil {
 		t.Fatal(err)
 	}
+	var violations []string
 	for _, entry := range entries {
+		if ignoredDirectory(entry.Name()) {
+			continue
+		}
 		if slices.Contains(item.AllowedTopLevelRoots, entry.Name()) {
 			continue
 		}
-		t.Fatalf("unexpected top-level root %s", entry.Name())
+		violations = append(violations, entry.Name())
 	}
+	return violations
 }
 
 func requireRequiredFiles(t *testing.T, item manifest) {
@@ -159,10 +183,16 @@ func sourceInventoryViolations(t *testing.T, root string, owners map[string]bool
 
 	var violations []string
 	err := filepath.WalkDir(root, func(path string, entry os.DirEntry, err error) error {
-		if err != nil || entry.IsDir() {
+		if err != nil {
 			return err
 		}
 		relative := relativePathFrom(t, root, path)
+		if entry.IsDir() {
+			if ignoredDirectory(relative) {
+				return filepath.SkipDir
+			}
+			return nil
+		}
 		if !sourceInventoryApplies(relative) || sourceOwned(relative, owners) {
 			return nil
 		}
@@ -227,6 +257,10 @@ func sourceInventoryApplies(path string) bool {
 	}
 }
 
+func ignoredDirectory(path string) bool {
+	return path == ".git"
+}
+
 func sourceOwned(path string, owners map[string]bool) bool {
 	return owners[path]
 }
@@ -236,6 +270,14 @@ func requireUnowned(t *testing.T, violations []string, path string) {
 
 	if !slices.Contains(violations, path) {
 		t.Fatalf("violations = %v, want %s", violations, path)
+	}
+}
+
+func requireNoPath(t *testing.T, paths []string, path string) {
+	t.Helper()
+
+	if slices.Contains(paths, path) {
+		t.Fatalf("paths = %v, did not want %s", paths, path)
 	}
 }
 
