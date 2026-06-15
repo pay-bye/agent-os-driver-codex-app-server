@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "compatibility": {
+    "accepted_versions": ["v1"],
+    "accepted_schema_set_digests": [
+      "sha256:19839901e6b07f949d015821f5f6823fc2fc98fdce4934904294f6c75404f9ac"
+    ],
+    "required_features": [
+      "lease_claim",
+      "lease_extend",
+      "lease_ack",
+      "lease_nack",
+      "lease_capability",
+      "declared_needs",
+      "failure_payload"
+    ],
+    "required_routes": [
+      {
+        "method": "POST",
+        "path": "/claim"
+      },
+      {
+        "method": "POST",
+        "path": "/ack"
+      },
+      {
+        "method": "POST",
+        "path": "/nack"
+      },
+      {
+        "method": "POST",
+        "path": "/extend"
+      },
+      {
+        "method": "GET",
+        "path": "/compatibility"
+      }
+    ],
+    "install_record": {
+      "current_version": 3,
+      "minimum_readable_version": 1
+    },
+    "codex_cli": {
+      "version": {
+        "evidence": "record_current"
+      }
+    },
+    "app_server": {
+      "schema_digest_canonicalization": "json_sort_keys_v1",
+      "required_schema_files": [
+        "codex_app_server_protocol.schemas.json",
+        "codex_app_server_protocol.v2.schemas.json",
+        "v2/ThreadStartParams.json",
+        "v2/ThreadStartResponse.json",
+        "v2/TurnStartParams.json",
+        "v2/TurnStartResponse.json",
+        "v2/TurnCompletedNotification.json",
+        "v2/TurnInterruptParams.json",
+        "v2/TurnInterruptResponse.json",
+        "v2/RemoteControlEnableResponse.json",
+        "v2/RemoteControlDisableResponse.json",
+        "v2/RemoteControlStatusReadResponse.json",
+        "v2/RemoteControlStatusChangedNotification.json"
+      ],
+      "required_methods": ["initialize", "thread/start", "turn/start", "turn/interrupt"],
+      "required_notifications": ["turn/completed"],
+      "control_surface": "uds_websocket"
+    }
+  }
+}

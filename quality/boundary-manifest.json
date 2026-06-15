@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "required_files": [
+    "go.mod",
+    "go.sum",
+    "README.md",
+    "scripts/verify.sh",
+    "quality/boundary-manifest.json",
+    "internal/install/driver_manifest.json"
+  ],
+  "allowed_top_level_roots": [
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "GOVERNANCE.md",
+    "LICENSE",
+    "SECURITY.md",
+    "cmd",
+    "docs",
+    "internal",
+    "quality",
+    "scripts",
+    "tests",
+    "README.md",
+    "go.mod",
+    "go.sum"
+  ],
+  "production_packages": [
+    "cmd/driver",
+    "internal/compatibility",
+    "internal/config",
+    "internal/control",
+    "internal/install",
+    "internal/invoke",
+    "internal/status",
+    "internal/transmit"
+  ],
+  "source_inventory": [
+    {
+      "responsibility": "driver command entry and dispatch",
+      "path": "cmd/driver",
+      "files": [
+        "command.go",
+        "config.go",
+        "diagnostic.go",
+        "diagnostic_test.go",
+        "dispatch.go",
+        "dispatch_test.go",
+        "exit.go",
+        "exit_test.go",
+        "fixture_test.go",
+        "main.go",
+        "status_test.go"
+      ]
+    },
+    {
+      "responsibility": "compatibility verdicts and metadata",
+      "path": "internal/compatibility",
+      "files": [
+        "app_metadata.go",
+        "app_metadata_test.go",
+        "check.go",
+        "check_test.go",
+        "diagnostic.go",
+        "evidence.go",
+        "fixture_test.go",
+        "metadata.go",
+        "requirements.go",
+        "requirements_validation.go"
+      ]
+    },
+    {
+      "responsibility": "configuration documents and validation",
+      "path": "internal/config",
+      "files": [
+        "control_endpoint.go",
+        "control_endpoint_test.go",
+        "document.go",
+        "fixture_test.go",
+        "load.go",
+        "load_test.go",
+        "payload_text.go",
+        "payload_text_test.go",
+        "validate.go",
+        "validate_test.go"
+      ]
+    },
+    {
+      "responsibility": "Codex app control transport",
+      "path": "internal/control",
+      "files": [
+        "client.go",
+        "client_test.go",
+        "connection.go",
+        "daemon.go",
+        "daemon_test.go",
+        "fixture_test.go",
+        "request.go",
+        "response.go",
+        "schema.go",
+        "schema_test.go",
+        "status.go"
+      ]
+    },
+    {
+      "responsibility": "driver installation materialization",
+      "path": "internal/install",
+      "files": [
+        "apply_test.go",
+        "config_writer.go",
+        "config_writer_test.go",
+        "directory.go",
+        "directory_test.go",
+        "driver_manifest.go",
+        "driver_manifest.json",
+        "driver_manifest_test.go",
+        "executable_check.go",
+        "executable_check_test.go",
+        "fixture_test.go",
+        "install.go",
+        "manifest_writer.go",
+        "manifest_writer_test.go",
+        "record.go",
+        "record_test.go",
+        "upgrade_test.go",
+        "verifier.go"
+      ]
+    },
+    {
+      "responsibility": "adopter install, update, governance, and catalog docs",
+      "path": "docs",
+      "files": [
+        "catalog.md",
+        "governance.md",
+        "install.md",
+        "update.md"
+      ]
+    },
+    {
+      "responsibility": "invocation lease client",
+      "path": "internal/invoke",
+      "files": [
+        "client.go",
+        "client_test.go",
+        "fixture_test.go",
+        "payload.go",
+        "payload_test.go",
+        "request.go",
+        "request_test.go",
+        "response.go",
+        "response_test.go",
+        "surface.go",
+        "surface_test.go"
+      ]
+    },
+    {
+      "responsibility": "driver status and daemon readiness",
+      "path": "internal/status",
+      "files": [
+        "daemon.go",
+        "failure.go",
+        "failure_test.go",
+        "render.go",
+        "render_test.go",
+        "snapshot.go"
+      ]
+    },
+    {
+      "responsibility": "work transmission polling",
+      "path": "internal/transmit",
+      "files": [
+        "extend.go",
+        "extend_test.go",
+        "fixture_test.go",
+        "poller.go",
+        "poller_test.go",
+        "wait.go",
+        "wait_test.go"
+      ]
+    },
+    {
+      "responsibility": "quality boundary contract",
+      "path": "quality",
+      "files": [
+        "boundary-manifest.json"
+      ]
+    },
+    {
+      "responsibility": "verification command surface",
+      "path": "scripts",
+      "files": [
+        "verify.sh",
+        "verify/architecture.sh",
+        "verify/go.sh",
+        "verify/integration.sh"
+      ]
+    },
+    {
+      "responsibility": "verification tests",
+      "path": "tests",
+      "files": [
+        "architecture/boundary_test.go",
+        "integration/daemon/daemon_test.go"
+      ]
+    }
+  ]
+}
